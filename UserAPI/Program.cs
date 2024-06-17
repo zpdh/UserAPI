@@ -1,10 +1,17 @@
+using UserAPI.Data;
+using Microsoft.Extensions.DependencyInjection;
 namespace UserAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<DataContext>();
+
+            builder.Services.AddControllers();
+
             var app = builder.Build();
 
             app.UseRouting();
