@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserAPI.Data;
-using UserAPI.Helpers;
 using UserAPI.Models;
+using UserAPI.Services;
 
 namespace UserAPI.Controllers
 {
@@ -12,31 +13,36 @@ namespace UserAPI.Controllers
     {
         [HttpGet]
         [Route("users")]
+        [Authorize]
         public async Task<IActionResult> GetAsync([FromServices] DataContext context)
         {
-            var userList = await
-                context
-                .Users
-                .AsNoTracking()
-                .ToListAsync();
+            var userList = 
+            await
+            context
+            .Users
+            .AsNoTracking()
+            .ToListAsync();
 
             return Ok(userList);
         }
 
         [HttpGet]
         [Route("users/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetByIdAsync([FromServices] DataContext context, [FromRoute] int id)
         {
-            var user = await
-                context
-                .Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var user = 
+            await
+            context
+            .Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
 
             return user == null ? NotFound() : Ok(user);
         }
 
         [HttpPost("users")]
+        [Authorize]
         public async Task<IActionResult> PostAsync([FromServices] DataContext context, [FromBody] Users user)
         {
             if (!ModelState.IsValid)
@@ -46,38 +52,35 @@ namespace UserAPI.Controllers
 
             try
             {
-                user.Password = user.Password.GenerateHash();
                 await
                 context
                 .Users
                 .AddAsync(user);
 
+                await 
                 context
                 .SaveChangesAsync();
 
+                return Created($"v1/users/{user.Id}", user);
             }
             catch
             {
                 return BadRequest();
             }
-            await
-                context
-                .SaveChangesAsync();
-
-            return Created($"v1/users/{user.Id}", user);
         }
 
         [HttpPut]
         [Route("users/{id}")]
+        [Authorize]
         public async Task<IActionResult> PutAsync([FromServices] DataContext context, [FromBody] Users user, [FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest();
 
             var target =
-                await
-                context
-                .Users
-                .FirstOrDefaultAsync(x => x.Id == id);
+            await
+            context
+            .Users
+            .FirstOrDefaultAsync(x => x.Id == id);
 
             if (target == null) return NotFound();
 
@@ -85,9 +88,7 @@ namespace UserAPI.Controllers
             {
                 target.Name = user.Name;
                 target.Email = user.Email;
-
-                if (user.Password.Length <= 16) target.Password = user.Password.GenerateHash();
-                else target.Password = user.Password;
+                target.Password = user.Password;
 
                 context.Update(target);
 
@@ -105,6 +106,7 @@ namespace UserAPI.Controllers
 
         [HttpDelete]
         [Route("users/{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteAsync([FromServices] DataContext context, [FromRoute] int id)
         {
             var user =
@@ -129,6 +131,28 @@ namespace UserAPI.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        //To generate key, go to v1/auth and enter a valid user in database, then use the bearer token to authenticate.
+        [HttpPost]
+        [Route("auth")]
+        public async Task<ActionResult<dynamic>> AuthenticateAsync([FromServices] DataContext context, [FromBody] Users model)
+        {
+            var user = 
+            await 
+            context
+            .Users
+            .FirstOrDefaultAsync(x => x.Name == model.Name);
+
+            if (user == null || user.Password != model.Password) return NotFound();
+
+            var token = TokenService.GenerateToken(user);
+
+            return new
+            {
+                user = user.Name,
+                token = token
+            };
         }
     }
 }

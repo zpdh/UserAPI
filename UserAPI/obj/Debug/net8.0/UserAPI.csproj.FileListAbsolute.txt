@@ -121,3 +121,12 @@ C:\Users\Carine\source\repos\UserAPI\UserAPI\obj\Debug\net8.0\refint\UserAPI.dll
 C:\Users\Carine\source\repos\UserAPI\UserAPI\obj\Debug\net8.0\UserAPI.pdb
 C:\Users\Carine\source\repos\UserAPI\UserAPI\obj\Debug\net8.0\UserAPI.genruntimeconfig.cache
 C:\Users\Carine\source\repos\UserAPI\UserAPI\obj\Debug\net8.0\ref\UserAPI.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Carine\source\repos\UserAPI\UserAPI\bin\Debug\net8.0\System.Security.Permissions.dll
